@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "rox"
+
+case ARGV.length
+when 0
+  Rox::Prompt.run
+when 1
+  Rox::FileRunner.run(ARGV[0])
+else
+  puts "Usage: rox [script]"
+end
