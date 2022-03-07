@@ -51,7 +51,7 @@ module Rox
     attr_reader :source
 
     sig {returns(Integer)}
-    attr_reader :start
+    attr_accessor :start
 
     sig {returns(Integer)}
     attr_accessor :current
@@ -89,11 +89,6 @@ module Rox
       tokens
     end
 
-    sig {returns(T::Boolean)}
-    def is_at_end?
-      current >= source.length
-    end
-
     sig {returns(NilClass)}
     def scan_token
       c = advance
@@ -119,7 +114,14 @@ module Rox
         add_token(Token::Type::SEMICOLON)
       when '*'
         add_token(Token::Type::STAR)
+      else
+        raise Error.new('Unexpected character.', line, c || '')
       end
+    end
+
+    sig {returns(T::Boolean)}
+    def is_at_end?
+      current >= source.length
     end
 
     sig {returns(T.nilable(String))}
@@ -131,7 +133,8 @@ module Rox
 
     sig {params(type: Token::Type, literal: T.nilable(Object)).returns(NilClass)}
     def add_token(type, literal: nil)
-      text = source[start..current] || ''
+      text = source[start..(current - 1)] || ''
+      puts "start #{start} current #{current}"
       tokens << Token.new(type: type, lexeme: text, literal: literal, line: line)
       nil
     end
