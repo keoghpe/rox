@@ -71,12 +71,27 @@ module Rox
         add_token(Token::Type::SEMICOLON)
       when '*'
         add_token(Token::Type::STAR)
+      when '!'
+        add_token(match?("=") ? Token::Type::BANG_EQUAL : Token::Type::BANG)
+      when '='
+        add_token(match?("=") ? Token::Type::EQUAL_EQUAL : Token::Type::EQUAL)
+      when '<'
+        add_token(match?("=") ? Token::Type::LESS_EQUAL : Token::Type::LESS)
+      when '>'
+        add_token(match?("=") ? Token::Type::GREATER_EQUAL : Token::Type::GREATER)
       when "\n"
         # TODO: ADD OTHER LINE ENDINGS
         add_token(Token::Type::RETURN)
       else
         raise Error.new('Unexpected character.', line, c || '')
       end
+    end
+
+    sig {params(char: String).returns(T::Boolean)}
+    def match?(char)
+      is_match = !is_at_end? && source[current] == char
+      advance if is_match
+      is_match
     end
 
     sig {returns(T::Boolean)}
@@ -86,9 +101,8 @@ module Rox
 
     sig {returns(T.nilable(String))}
     def advance
-      char = source[current]
       @current += 1
-      char
+      source[current - 1]
     end
 
     sig {params(type: Token::Type, literal: T.nilable(Object)).void}
