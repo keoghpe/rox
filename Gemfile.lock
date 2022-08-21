@@ -6,36 +6,40 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    diff-lcs (1.4.4)
+    ansi (1.5.0)
+    builder (3.2.4)
+    language_server-protocol (3.16.0.3)
+    minitest (5.16.3)
+    minitest-reporters (1.5.0)
+      ansi
+      builder
+      minitest (>= 5.0)
+      ruby-progressbar
+    prettier_print (0.1.0)
     rake (13.0.6)
-    rspec (3.10.0)
-      rspec-core (~> 3.10.0)
-      rspec-expectations (~> 3.10.0)
-      rspec-mocks (~> 3.10.0)
-    rspec-core (3.10.1)
-      rspec-support (~> 3.10.0)
-    rspec-expectations (3.10.1)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.10.0)
-    rspec-mocks (3.10.2)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.10.0)
-    rspec-support (3.10.2)
-    sorbet (0.5.9090)
-      sorbet-static (= 0.5.9090)
-    sorbet-runtime (0.5.9090)
-    sorbet-static (0.5.9090-universal-darwin-20)
+    ruby-lsp (0.2.3)
+      language_server-protocol
+      sorbet-runtime
+      syntax_tree (>= 2.4)
+    ruby-progressbar (1.11.0)
+    sorbet (0.5.10346)
+      sorbet-static (= 0.5.10346)
+    sorbet-runtime (0.5.10354)
+    sorbet-static (0.5.10346-universal-darwin-21)
+    syntax_tree (3.4.0)
+      prettier_print
 
 PLATFORMS
-  ruby
-  x86_64-darwin-20
+  x86_64-darwin-21
 
 DEPENDENCIES
+  minitest (>= 5.8)
+  minitest-reporters (>= 1.1)
   rake (~> 13.0)
   rox!
-  rspec (~> 3.0)
+  ruby-lsp
   sorbet
   sorbet-runtime
 
 BUNDLED WITH
-   2.2.11
+   2.3.14

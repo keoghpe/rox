@@ -7,7 +7,9 @@ gemspec
 
 gem "rake", "~> 13.0"
 
-gem "rspec", "~> 3.0"
-
-gem 'sorbet', :group => :development
 gem 'sorbet-runtime'
+
+group :development do
+  gem 'sorbet'
+  gem "ruby-lsp", require: false
+end
