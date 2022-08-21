@@ -11,5 +11,6 @@ gem 'sorbet-runtime'
 
 group :development do
   gem 'sorbet'
+  gem "pry"
   gem "ruby-lsp", require: false
 end
