@@ -90,11 +90,16 @@ module Rox
         self.line += 1
       when "\""
         string
+      when /\d/
+        number
+      when /[A-Za-z_]/
+        identifier
       else
         raise Error.new('Unexpected character.', line, current)
       end
     end
 
+    sig {void}
     def string
       while peek != "\"" && !is_at_end?
         self.line += 1 if peek == "\n"
@@ -110,12 +115,40 @@ module Rox
       add_token(Token::Type::STRING, literal: source[(start+1)..(current-2)])
     end
 
+    sig {void}
+    def number
+      advance while peek&.match? /\d/
+
+      if peek == "." && peek_next&.match?(/\d/)
+        advance
+
+        advance while peek&.match? /\d/
+      end
+
+      # NOTE: USING FLOATS UNDER THE HOOD HERE!!!!
+      add_token(Token::Type::NUMBER, literal: source[start..current-1].to_f)
+    end
+
+    sig {void}
+    def identifier
+      advance while peek&.match? /[A-Za-z_\d]/
+      text = source[start..current-1]
+      token_type = Token::KEYWORDS[text] || Token::Type::IDENTIFIER
+      add_token(token_type)
+    end
+
     # Implements a "lookahead" it looks at the next char without consuming it
     # Too keep the language fast, this should be kept to 1 or two characters
     sig {returns(T.nilable(String))}
     def peek
       return "\0" if is_at_end?
       source[current]
+    end
+
+    sig {returns(T.nilable(String))}
+    def peek_next
+      return "\0" if current + 1 >= source.length
+      source[current + 1]
     end
 
     sig {params(char: String).returns(T::Boolean)}

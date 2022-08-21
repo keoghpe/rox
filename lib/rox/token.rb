@@ -62,7 +62,29 @@ module Rox
 
         EOF = new("EOF")
       end
+
     end
+
+    KEYWORDS = {
+        "and": Type::AND,
+        "class": Type::CLASS,
+        "else": Type::ELSE,
+        "false": Type::FALSE,
+        "fun": Type::FUN,
+        "for": Type::FOR,
+        "if": Type::IF,
+        "nil": Type::NIL,
+        "or": Type::OR,
+        "print": Type::PRINT,
+        "return": Type::RETURN,
+        "super": Type::SUPER,
+        "this": Type::THIS,
+        "true": Type::TRUE,
+        "var": Type::VAR,
+        "while": Type::WHILE,
+    }
+
+
 
     sig {returns(Type)}
     attr_reader :type
