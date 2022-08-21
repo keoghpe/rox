@@ -88,9 +88,26 @@ module Rox
       when " ", "\r", "\t"
       when "\n"
         self.line += 1
+      when "\""
+        string
       else
-        raise Error.new('Unexpected character.', line, c || '')
+        raise Error.new('Unexpected character.', line, current)
       end
+    end
+
+    def string
+      while peek != "\"" && !is_at_end?
+        self.line += 1 if peek == "\n"
+        advance
+      end
+
+      if is_at_end?
+        raise Error.new('Unterminated String')
+      end
+
+      # advance for closing "
+      advance
+      add_token(Token::Type::STRING, literal: source[(start+1)..(current-2)])
     end
 
     # Implements a "lookahead" it looks at the next char without consuming it
@@ -134,11 +151,11 @@ module Rox
     sig {returns(Integer)}
     attr_reader :line
 
-    sig {returns(String)}
+    sig {returns(Integer)}
     attr_reader :where
 
-    sig {params(message: String, line: Integer, where: String).void}
-    def initialize(message='', line=-1, where='')
+    sig {params(message: String, line: Integer, where: Integer).void}
+    def initialize(message='', line=-1, where=-1)
       @line = line
       @where = where
       super(message)
