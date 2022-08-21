@@ -79,12 +79,26 @@ module Rox
         add_token(match?("=") ? Token::Type::LESS_EQUAL : Token::Type::LESS)
       when '>'
         add_token(match?("=") ? Token::Type::GREATER_EQUAL : Token::Type::GREATER)
+      when '/'
+        if match?('/')
+          advance while peek != "/n" && !is_at_end?
+        else
+          add_token(Token::Type::SLASH)
+        end
+      when " ", "\r", "\t"
       when "\n"
-        # TODO: ADD OTHER LINE ENDINGS
-        add_token(Token::Type::RETURN)
+        self.line += 1
       else
         raise Error.new('Unexpected character.', line, c || '')
       end
+    end
+
+    # Implements a "lookahead" it looks at the next char without consuming it
+    # Too keep the language fast, this should be kept to 1 or two characters
+    sig {returns(T.nilable(String))}
+    def peek
+      return "\0" if is_at_end?
+      source[current]
     end
 
     sig {params(char: String).returns(T::Boolean)}
